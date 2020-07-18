@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
 import 'package:webfeed/domain/atom_item.dart';
-import 'feeder.dart';
 
 class ContentReader extends StatefulWidget {
   ContentReader({Key key, this.title, this.feedItem}) : super(key: key);

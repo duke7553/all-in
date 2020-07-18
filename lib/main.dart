@@ -2,11 +2,9 @@ import 'dart:ui';
 
 import 'package:all_in/contentView.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/src/foundation/diagnostics.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
 import 'package:webfeed/domain/atom_feed.dart';
-import 'package:webfeed/domain/rss_feed.dart';
 import 'feeder.dart';
 import 'package:flutter/material.dart';
 
@@ -379,11 +377,9 @@ class TextHeading extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  // TODO: implement maxExtent
   double get maxExtent => 100;
 
   @override
-  // TODO: implement minExtent
   double get minExtent => 80;
 
   @override
