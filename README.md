@@ -2,6 +2,8 @@
 
 A new project which aims to bring the best aspects of All In to the entire school
 
+!(Screenshot.jpg)
+
 ## Contributing
 
 There are some things you should know before making a contribution:
