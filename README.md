@@ -2,7 +2,7 @@
 
 A new project which aims to bring the best aspects of All In to the entire school
 
-!(Screenshot.jpg)
+<img src="Screenshot.jpg" width="25%">
 
 ## Contributing
 
