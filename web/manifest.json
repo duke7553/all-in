@@ -1,17 +1,27 @@
 {
-    "name": "all_in",
-    "short_name": "all_in",
+    "name": "All In",
+    "short_name": "All In",
     "start_url": ".",
-    "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "display": "fullscreen",
+    "background_color": "#FFFFFF",
+    "theme_color": "#b71c1c",
+    "description": "Bringing the best of All In to LHS.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
         {
             "src": "icons/Icon-192.png",
             "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-200.png",
+            "sizes": "200x200",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-256.png",
+            "sizes": "256x256",
             "type": "image/png"
         },
         {

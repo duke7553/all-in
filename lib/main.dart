@@ -4,7 +4,6 @@ import 'package:all_in/contentView.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
-import 'package:webfeed/domain/atom_feed.dart';
 import 'feeder.dart';
 import 'package:flutter/material.dart';
 
@@ -105,16 +104,16 @@ class _MyHomePageState extends State<MyHomePage> {
           centerTitle: true,
         ),
         body: bodyWidget,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton.extended(
-          label: Text("Let's talk",
-              style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w500)),
-          onPressed: contactInvoked,
-          tooltip: 'We\'re always here for you',
-          elevation: 1.25,
-          isExtended: true,
-          icon: Icon(Icons.chat),
-        ), // This trailing comma makes auto-formatting nicer for build methods.
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // floatingActionButton: FloatingActionButton.extended(
+        //   label: Text("Let's talk",
+        //       style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w500)),
+        //   onPressed: contactInvoked,
+        //   tooltip: 'We\'re always here for you',
+        //   elevation: 1.25,
+        //   isExtended: true,
+        //   icon: Icon(Icons.chat),
+        // ), // This trailing comma makes auto-formatting nicer for build methods.
         bottomNavigationBar: BottomAppBar(
             shape: AutomaticNotchedShape(
                 RoundedRectangleBorder(), StadiumBorder()),
@@ -207,22 +206,19 @@ class SchedulePageState extends StatelessWidget {
   }
 }
 
+List<dynamic> feed;
+
 class LessonsPageState extends StatelessWidget {
-  Future<AtomFeed> loadFeeds() async {
-    if (_currentUrl == null) return null;
-    if (_feed != null) return _feed;
-    _feed = null;
-    AtomFeed feed = await feeder.getFeed(_currentUrl);
-    _feed = feed;
-    //print(feed.items[0].content);
+  Future loadFeeds() async {
+    feed = await feeder.fetchData();
     return feed;
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<AtomFeed>(
+    return FutureBuilder(
       future: loadFeeds(),
-      builder: (context, AsyncSnapshot<AtomFeed> snapshot) {
+      builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return Container(
             child: Padding(
@@ -237,23 +233,23 @@ class LessonsPageState extends StatelessWidget {
                     BuildContext context,
                     int index,
                   ) {
+                    var post = feed[index];
                     return GestureDetector(
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ContentReader(
-                                        feedItem: _feed.items[index],
+                                        feedItem: feed[index],
                                       )));
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            _feed.items[index].media.thumbnails.length > 0
+                            feeder.imageUrlFromPost(post) != null
                                 ? ClipRRect(
                                     child: Image.network(
-                                        _feed.items[index].media.thumbnails
-                                            .first.url,
+                                        feeder.imageUrlFromPost(post),
                                         filterQuality: FilterQuality.low,
                                         fit: BoxFit.cover,
                                         height: 200,
@@ -263,36 +259,30 @@ class LessonsPageState extends StatelessWidget {
                                 : SizedBox(
                                     height: 1,
                                   ),
-                            Text(_feed.items[index].title,
+                            Text(post["title"],
                                 style: GoogleFonts.ibmPlexSans(
                                     fontSize: 22, fontWeight: FontWeight.w600)),
                             Text(
-                                parse(_feed.items[index].content)
-                                            .body
-                                            .text
-                                            .length >
-                                        99
-                                    ? parse(_feed.items[index].content)
+                                parse(post["content"]).body.text.length > 99
+                                    ? parse(post["content"])
                                             .body
                                             .text
                                             .substring(0, 100)
                                             .trimLeft() +
                                         "..."
-                                    : parse(_feed.items[index].content)
-                                        .body
-                                        .text,
+                                    : parse(post["content"]).body.text,
                                 style: GoogleFonts.ibmPlexSans()),
                             SizedBox(height: 20)
                           ],
                         ));
-                  }, childCount: _feed.items.length))
+                  }, childCount: feed.length))
                 ],
               ),
             ),
           );
         } else {
-          return Padding(
-              padding: EdgeInsets.all(165),
+          return Align(
+              alignment: Alignment.center,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -306,10 +296,7 @@ class LessonsPageState extends StatelessWidget {
   }
 }
 
-final String _currentUrl =
-    "https://lukeallin.blogspot.com/feeds/posts/default?alt=atom";
 final Feeder feeder = new Feeder();
-AtomFeed _feed;
 
 class TextHeading extends SliverPersistentHeaderDelegate {
   String heading;
