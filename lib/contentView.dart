@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
 import 'feeder.dart';
@@ -73,7 +71,8 @@ class ContentReaderState extends State<ContentReader> {
                           Text(widget.feedItem["published"],
                               style: GoogleFonts.ibmPlexSans(fontSize: 12)),
                           SizedBox(height: 12),
-                          Text(parse(widget.feedItem["content"]).body.text,
+                          SelectableText(
+                              parse(widget.feedItem["content"]).body.text,
                               style: GoogleFonts.ibmPlexSerif(fontSize: 16)),
                         ],
                       ))

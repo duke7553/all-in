@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:html/parser.dart';
-import 'package:http/http.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class Feeder {
   //Function to fetch data from JSON instead
@@ -10,11 +10,9 @@ class Feeder {
     print("attempting");
     final url =
         "https://www.googleapis.com/blogger/v3/blogs/6446146598590792727/posts/?key=AIzaSyCGIGijPUC5H4tjm4a3YuNdvS6NRv2h8j8";
-    final response = await get(url);
-    print(response);
-    if (response.statusCode == 200) {
-      //HTTP OK is 200
-      final Map items = json.decode(response.body);
+    var file = await DefaultCacheManager().getSingleFile(url);
+    if (file != null) {
+      final Map items = json.decode(await file.readAsString());
       return items['items'];
     }
   }

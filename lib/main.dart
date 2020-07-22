@@ -4,8 +4,11 @@ import 'package:all_in/contentView.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
+import 'package:js/js.dart';
 import 'feeder.dart';
 import 'package:flutter/material.dart';
+
+import 'loadFeeds.dart';
 
 void main() {
   runApp(MyApp());
@@ -104,82 +107,86 @@ class _MyHomePageState extends State<MyHomePage> {
           centerTitle: true,
         ),
         body: bodyWidget,
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        // floatingActionButton: FloatingActionButton.extended(
-        //   label: Text("Let's talk",
-        //       style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w500)),
-        //   onPressed: contactInvoked,
-        //   tooltip: 'We\'re always here for you',
-        //   elevation: 1.25,
-        //   isExtended: true,
-        //   icon: Icon(Icons.chat),
-        // ), // This trailing comma makes auto-formatting nicer for build methods.
-        bottomNavigationBar: BottomAppBar(
-            shape: AutomaticNotchedShape(
-                RoundedRectangleBorder(), StadiumBorder()),
-            notchMargin: 5.0,
-            elevation: 12.0,
-            child: new Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Padding(
-                    padding: EdgeInsets.only(right: 140),
-                    child: SizedBox(
-                      height: 60,
-                      width: 120,
-                      child: Material(
-                        type: MaterialType.transparency,
-                        child: InkWell(
-                          onTap: onLessonsInvoked,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.lightbulb_outline,
-                                  color: _selectedIndex == 0
-                                      ? Color.fromRGBO(183, 28, 28, 1)
-                                      : Colors.black),
-                              Text("Lessons",
-                                  style: GoogleFonts.ibmPlexSans(
-                                      color: _selectedIndex == 0
-                                          ? Color.fromRGBO(183, 28, 28, 1)
-                                          : Colors.black)),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )),
-                Padding(
-                  padding: EdgeInsets.only(left: 5),
-                  child: SizedBox(
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // floatingActionButton: , // This trailing comma makes auto-formatting nicer for build methods.
+        bottomNavigationBar: Stack(children: [
+          BottomAppBar(
+              shape: AutomaticNotchedShape(
+                  RoundedRectangleBorder(), StadiumBorder()),
+              notchMargin: 5.0,
+              elevation: 12.0,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Expanded(
+                      child: SizedBox(
                     height: 60,
-                    width: 120,
                     child: Material(
                       type: MaterialType.transparency,
                       child: InkWell(
-                        onTap: _onScheduleInvoked,
+                        onTap: onLessonsInvoked,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Icon(Icons.info_outline,
-                                color: _selectedIndex == 1
+                            Icon(Icons.lightbulb_outline,
+                                color: _selectedIndex == 0
                                     ? Color.fromRGBO(183, 28, 28, 1)
                                     : Colors.black),
-                            Text("About",
+                            Text("Lessons",
                                 style: GoogleFonts.ibmPlexSans(
-                                    color: _selectedIndex == 1
+                                    color: _selectedIndex == 0
                                         ? Color.fromRGBO(183, 28, 28, 1)
                                         : Colors.black)),
                           ],
                         ),
                       ),
                     ),
-                  ),
+                  )),
+                  Expanded(
+                    child: SizedBox(
+                      height: 60,
+                      child: Material(
+                        type: MaterialType.transparency,
+                        child: InkWell(
+                          onTap: _onScheduleInvoked,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(Icons.info_outline,
+                                  color: _selectedIndex == 1
+                                      ? Color.fromRGBO(183, 28, 28, 1)
+                                      : Colors.black),
+                              Text("About",
+                                  style: GoogleFonts.ibmPlexSans(
+                                      color: _selectedIndex == 1
+                                          ? Color.fromRGBO(183, 28, 28, 1)
+                                          : Colors.black)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )),
+          Container(
+              transform: Matrix4.translationValues(0, -20, 0),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                FloatingActionButton.extended(
+                  label: Text("Let's talk",
+                      style:
+                          GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w500)),
+                  onPressed: contactInvoked,
+                  tooltip: 'We\'re always here for you',
+                  elevation: 3.25,
+                  isExtended: true,
+                  icon: Icon(Icons.chat),
                 )
-              ],
-            )));
+              ]))
+        ]));
   }
 
   void _onScheduleInvoked() {
@@ -206,14 +213,9 @@ class SchedulePageState extends StatelessWidget {
   }
 }
 
-List<dynamic> feed;
+final Feeder feeder = new Feeder();
 
 class LessonsPageState extends StatelessWidget {
-  Future loadFeeds() async {
-    feed = await feeder.fetchData();
-    return feed;
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -233,14 +235,14 @@ class LessonsPageState extends StatelessWidget {
                     BuildContext context,
                     int index,
                   ) {
-                    var post = feed[index];
+                    var post = snapshot.data[index];
                     return GestureDetector(
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ContentReader(
-                                        feedItem: feed[index],
+                                        feedItem: snapshot.data[index],
                                       )));
                         },
                         child: Column(
@@ -275,7 +277,7 @@ class LessonsPageState extends StatelessWidget {
                             SizedBox(height: 20)
                           ],
                         ));
-                  }, childCount: feed.length))
+                  }, childCount: snapshot.data.length))
                 ],
               ),
             ),
@@ -295,8 +297,6 @@ class LessonsPageState extends StatelessWidget {
     );
   }
 }
-
-final Feeder feeder = new Feeder();
 
 class TextHeading extends SliverPersistentHeaderDelegate {
   String heading;
