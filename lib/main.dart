@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:all_in/contact.dart';
 import 'package:all_in/contentView.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -196,7 +197,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void contactInvoked() {}
+  void contactInvoked() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => FeedbackWidget()));
+  }
 
   void onLessonsInvoked() {
     _selectedIndex = 0;
