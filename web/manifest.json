@@ -2,7 +2,7 @@
     "name": "All In",
     "short_name": "All In",
     "start_url": ".",
-    "display": "fullscreen",
+    "display": "standalone",
     "background_color": "#FFFFFF",
     "theme_color": "#b71c1c",
     "description": "Bringing the best of All In to LHS.",
