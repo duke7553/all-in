@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
@@ -67,13 +70,23 @@ class ContentReaderState extends State<ContentReader> {
                                 fontWeight: FontWeight.bold, fontSize: 32),
                           ),
                           Text((widget.feedItem["author"])["displayName"],
-                              style: GoogleFonts.ibmPlexSans(fontSize: 14)),
+                              style: GoogleFonts.ibmPlexSans(fontSize: 18)),
                           Text(widget.feedItem["published"],
-                              style: GoogleFonts.ibmPlexSans(fontSize: 12)),
+                              style: GoogleFonts.ibmPlexSans(fontSize: 16)),
                           SizedBox(height: 12),
-                          SelectableText(
-                              parse(widget.feedItem["content"]).body.text,
-                              style: GoogleFonts.ibmPlexSerif(fontSize: 16)),
+                          Container(
+                              child: Text(
+                                  Uri.dataFromString(
+                                    widget.feedItem["content"]
+                                        .toString()
+                                        .replaceAll("<br />", "\n")
+                                        .replaceAll(RegExp("<(.*?)>"), "")
+                                        .replaceAll("&nbsp;", ""),
+                                    mimeType: "text/html",
+                                  ).data.contentAsString().trimLeft(),
+                                  softWrap: true,
+                                  style:
+                                      GoogleFonts.ibmPlexSerif(fontSize: 16))),
                         ],
                       ))
                 ]),
