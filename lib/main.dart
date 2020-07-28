@@ -363,9 +363,9 @@ class TextHeading extends SliverPersistentHeaderDelegate {
                   children: <Widget>[
                     Text(heading,
                         style: GoogleFonts.ibmPlexSans(
-                            fontWeight: FontWeight.bold, fontSize: 24)),
+                            fontWeight: FontWeight.bold, fontSize: 22)),
                     Text(subHeading,
-                        style: GoogleFonts.ibmPlexSans(fontSize: 18)),
+                        style: GoogleFonts.ibmPlexSans(fontSize: 16)),
                   ])),
         ),
       ]);
