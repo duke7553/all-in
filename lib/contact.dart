@@ -2,6 +2,7 @@ import 'dart:convert' as convert;
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -193,6 +194,7 @@ class FeedbackWidgetState extends State<FeedbackWidget> {
                             style: GoogleFonts.ibmPlexSans(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
                         ListView(
+                          physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           children: <Widget>[
                             CheckboxListTile(
@@ -295,6 +297,7 @@ class FeedbackWidgetState extends State<FeedbackWidget> {
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         ListView(
+                          physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           children: [
                             RadioListTile(
