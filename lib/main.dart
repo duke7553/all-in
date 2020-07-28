@@ -5,7 +5,6 @@ import 'package:all_in/contentView.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
-import 'package:js/js.dart';
 import 'feeder.dart';
 import 'package:flutter/material.dart';
 
@@ -96,22 +95,22 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title,
-              style: GoogleFonts.ibmPlexSans(
-                  color: Colors.black, fontWeight: FontWeight.bold)),
-          elevation: 0,
-          backgroundColor: Colors.white,
-          centerTitle: true,
-        ),
-        body: bodyWidget,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        // floatingActionButton: , // This trailing comma makes auto-formatting nicer for build methods.
-        bottomNavigationBar: Stack(children: [
-          BottomAppBar(
+    return Stack(children: [
+      Scaffold(
+          appBar: AppBar(
+            // Here we take the value from the MyHomePage object that was created by
+            // the App.build method, and use it to set our appbar title.
+            title: Text(widget.title,
+                style: GoogleFonts.ibmPlexSans(
+                    color: Colors.black, fontWeight: FontWeight.bold)),
+            elevation: 0,
+            backgroundColor: Colors.white,
+            centerTitle: true,
+          ),
+          body: bodyWidget,
+          // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          // floatingActionButton: , // This trailing comma makes auto-formatting nicer for build methods.
+          bottomNavigationBar: BottomAppBar(
               shape: AutomaticNotchedShape(
                   RoundedRectangleBorder(), StadiumBorder()),
               notchMargin: 5.0,
@@ -144,6 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   )),
+                  SizedBox(width: 50),
                   Expanded(
                     child: SizedBox(
                       height: 60,
@@ -171,23 +171,28 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   )
                 ],
-              )),
-          Container(
-              transform: Matrix4.translationValues(0, -20, 0),
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                FloatingActionButton.extended(
-                  label: Text("Let's talk",
-                      style:
-                          GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w500)),
-                  onPressed: contactInvoked,
-                  tooltip: 'We\'re always here for you',
-                  elevation: 3.25,
-                  isExtended: true,
-                  icon: Icon(Icons.chat),
-                )
-              ]))
-        ]));
+              ))),
+      Transform.translate(
+          offset: Offset(0, -30),
+          child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    FloatingActionButton.extended(
+                      materialTapTargetSize: MaterialTapTargetSize.padded,
+                      label: Text("Let's talk",
+                          style: GoogleFonts.ibmPlexSans(
+                              fontWeight: FontWeight.w500)),
+                      onPressed: contactInvoked,
+                      tooltip: 'We\'re always here for you',
+                      elevation: 3.25,
+                      isExtended: true,
+                      icon: Icon(Icons.chat),
+                    )
+                  ])))
+    ]);
   }
 
   void _onScheduleInvoked() {
