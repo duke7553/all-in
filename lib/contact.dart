@@ -1,9 +1,7 @@
 import 'dart:convert' as convert;
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_web/rendering.dart';
+import 'package:flutter_web/material.dart';
 import 'package:http/http.dart' as http;
 
 class FeedbackForm {
@@ -102,8 +100,8 @@ class FeedbackWidgetState extends State<FeedbackWidget> {
     return Scaffold(
         appBar: AppBar(
             title: Text("Reach Out to Us",
-                style: GoogleFonts.ibmPlexSans(
-                    color: Colors.black, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    fontFamily: "IBMPlexSans-Bold", color: Colors.black)),
             elevation: 0,
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
@@ -177,8 +175,8 @@ class FeedbackWidgetState extends State<FeedbackWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                         Text("What's up? Tell us what's on your mind today.",
-                            style: GoogleFonts.ibmPlexSans(
-                                fontSize: 24, fontWeight: FontWeight.bold)),
+                            style: TextStyle(
+                                fontFamily: "IBMPlexSans-Bold", fontSize: 24)),
                         TextFormField(
                             autovalidate: true,
                             maxLines: null,
@@ -191,8 +189,8 @@ class FeedbackWidgetState extends State<FeedbackWidget> {
                             }),
                         SizedBox(height: 12),
                         Text("How would you describe what you typed above?",
-                            style: GoogleFonts.ibmPlexSans(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
+                            style: TextStyle(
+                                fontFamily: "IBMPlexSans-Bold", fontSize: 20)),
                         ListView(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -293,8 +291,8 @@ class FeedbackWidgetState extends State<FeedbackWidget> {
                         SizedBox(height: 12),
                         Text(
                           "Do you want to tell us more about yourself?",
-                          style: GoogleFonts.ibmPlexSans(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontFamily: "IBMPlexSans-Bold", fontSize: 20),
                         ),
                         ListView(
                           physics: NeverScrollableScrollPhysics(),
@@ -326,8 +324,8 @@ class FeedbackWidgetState extends State<FeedbackWidget> {
                         SizedBox(height: 12),
                         Text(
                           "Additional Information",
-                          style: GoogleFonts.ibmPlexSans(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontFamily: "IBMPlexSans-Bold", fontSize: 24),
                         ),
                         TextFormField(
                             autovalidate: true,

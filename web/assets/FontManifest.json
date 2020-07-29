@@ -1,0 +1,10 @@
+[
+    {
+        "family": "IBMPlexSans-Regular",
+        "fonts":[
+            {
+                "asset": "../../fonts/IBMPlexSans-Regular.ttf"
+            }
+        ]
+    }
+]

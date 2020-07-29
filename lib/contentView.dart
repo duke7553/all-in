@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:html';
 
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_web/material.dart';
 import 'package:html/parser.dart';
 import 'feeder.dart';
 
@@ -33,8 +32,8 @@ class ContentReaderState extends State<ContentReader> {
     return Scaffold(
       appBar: AppBar(
           title: Text("Reading: Lesson Post",
-              style: GoogleFonts.ibmPlexSans(
-                  color: Colors.black, fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                  fontFamily: "IBMPlexSans-Bold", color: Colors.black)),
           elevation: 0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -56,8 +55,7 @@ class ContentReaderState extends State<ContentReader> {
                   Image.network(feeder.imageUrlFromPost(widget.feedItem),
                       fit: BoxFit.cover,
                       repeat: ImageRepeat.noRepeat,
-                      height: 200,
-                      cacheHeight: 200),
+                      height: 200),
                   Padding(
                       padding: EdgeInsets.all(12),
                       child: Column(
@@ -66,13 +64,17 @@ class ContentReaderState extends State<ContentReader> {
                         children: <Widget>[
                           Text(
                             widget.feedItem["title"],
-                            style: GoogleFonts.ibmPlexSans(
-                                fontWeight: FontWeight.bold, fontSize: 32),
+                            style: TextStyle(
+                                fontFamily: "IBMPlexSans-Bold", fontSize: 32),
                           ),
                           Text((widget.feedItem["author"])["displayName"],
-                              style: GoogleFonts.ibmPlexSans(fontSize: 18)),
+                              style: TextStyle(
+                                  fontFamily: "IBMPlexSans-Regular",
+                                  fontSize: 18)),
                           Text(widget.feedItem["published"],
-                              style: GoogleFonts.ibmPlexSans(fontSize: 16)),
+                              style: TextStyle(
+                                  fontFamily: "IBMPlexSans-Regular",
+                                  fontSize: 16)),
                           SizedBox(height: 12),
                           Container(
                               child: Text(
@@ -85,8 +87,9 @@ class ContentReaderState extends State<ContentReader> {
                                     mimeType: "text/html",
                                   ).data.contentAsString().trimLeft(),
                                   softWrap: true,
-                                  style:
-                                      GoogleFonts.ibmPlexSerif(fontSize: 16))),
+                                  style: TextStyle(
+                                      fontFamily: "IBMPlexSans-Regular",
+                                      fontSize: 16))),
                         ],
                       ))
                 ]),
