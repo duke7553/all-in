@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:html' as html;
 
 import 'package:all_in/contact.dart';
 import 'package:all_in/contentView.dart';
@@ -203,8 +204,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void contactInvoked() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => FeedbackWidget()));
+    // Navigator.push(
+    //     context, MaterialPageRoute(builder: (context) => FeedbackWidget()));
+    html.window.open(
+        "https://docs.google.com/forms/d/e/1FAIpQLSeDeUxHd_EuJx7ehoCuvpUQ1pFH_Vo28QcJimtleRtVeNSdTQ/viewform",
+        "_blank");
   }
 
   void onLessonsInvoked() {
