@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
 import 'feeder.dart';
+import 'main.dart';
 
 class ContentReader extends StatefulWidget {
   ContentReader({Key key, this.title, this.feedItem}) : super(key: key);
@@ -53,7 +54,10 @@ class ContentReaderState extends State<ContentReader> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Image.network(feeder.imageUrlFromPost(widget.feedItem),
+                  Image.network(
+                      feeder.imageUrlFromPost(widget.feedItem) != null
+                          ? feeder.imageUrlFromPost(widget.feedItem)
+                          : LessonsPageState.getPlaceholderImageUrl(),
                       fit: BoxFit.cover,
                       repeat: ImageRepeat.noRepeat,
                       height: 200,

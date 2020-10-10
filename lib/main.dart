@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 import 'dart:html' as html;
 
@@ -29,6 +30,15 @@ Map<int, Color> color = {
   800: Color.fromRGBO(183, 28, 28, .9),
   900: Color.fromRGBO(183, 28, 28, 1),
 };
+
+var placeholderImages = [
+  "https://picsum.photos/id/10/367/267",
+  "https://picsum.photos/id/1015/367/267",
+  "https://picsum.photos/id/1016/367/267",
+  "https://picsum.photos/id/1018/367/267",
+  "https://picsum.photos/id/1050/367/267",
+  "https://picsum.photos/id/1053/367/267"
+];
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -265,9 +275,15 @@ class LessonsPageState extends StatelessWidget {
                                         repeat: ImageRepeat.noRepeat,
                                         cacheHeight: 200),
                                     borderRadius: BorderRadius.circular(4))
-                                : SizedBox(
-                                    height: 1,
-                                  ),
+                                : ClipRRect(
+                                    child: Image.network(
+                                        getPlaceholderImageUrl(),
+                                        filterQuality: FilterQuality.low,
+                                        fit: BoxFit.cover,
+                                        height: 200,
+                                        repeat: ImageRepeat.noRepeat,
+                                        cacheHeight: 200),
+                                    borderRadius: BorderRadius.circular(4)),
                             Text(post["title"],
                                 style: GoogleFonts.ibmPlexSans(
                                     fontSize: 22, fontWeight: FontWeight.w600)),
@@ -302,6 +318,11 @@ class LessonsPageState extends StatelessWidget {
         }
       },
     );
+  }
+
+  static String getPlaceholderImageUrl() {
+    final _random = new Random();
+    return placeholderImages[_random.nextInt(placeholderImages.length)];
   }
 }
 
