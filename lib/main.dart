@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
-import 'package:all_in/contact.dart';
 import 'package:all_in/contentView.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +10,7 @@ import 'package:html/parser.dart';
 import 'aboutPage.dart';
 import 'feeder.dart';
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
 import 'loadFeeds.dart';
 
@@ -141,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Icon(Icons.lightbulb_outline,
+                            Icon(FluentIcons.lightbulb_filament_24_regular,
                                 color: _selectedIndex == 0
                                     ? Color.fromRGBO(183, 28, 28, 1)
                                     : Colors.black),
@@ -167,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Icon(Icons.info_outline,
+                              Icon(FluentIcons.info_24_regular,
                                   color: _selectedIndex == 1
                                       ? Color.fromRGBO(183, 28, 28, 1)
                                       : Colors.black),
@@ -201,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       tooltip: 'We\'re always here for you',
                       elevation: 3.25,
                       isExtended: true,
-                      icon: Icon(Icons.chat),
+                      icon: Icon(FluentIcons.chat_24_filled),
                     )
                   ])))
     ]);
@@ -253,54 +254,72 @@ class LessonsPageState extends StatelessWidget {
                     int index,
                   ) {
                     var post = snapshot.data[index];
-                    return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ContentReader(
-                                        feedItem: snapshot.data[index],
-                                      )));
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            feeder.imageUrlFromPost(post) != null
-                                ? ClipRRect(
-                                    child: Image.network(
-                                        feeder.imageUrlFromPost(post),
-                                        filterQuality: FilterQuality.low,
-                                        fit: BoxFit.cover,
-                                        height: 200,
-                                        repeat: ImageRepeat.noRepeat,
-                                        cacheHeight: 200),
-                                    borderRadius: BorderRadius.circular(4))
-                                : ClipRRect(
-                                    child: Image.network(
-                                        getPlaceholderImageUrl(),
-                                        filterQuality: FilterQuality.low,
-                                        fit: BoxFit.cover,
-                                        height: 200,
-                                        repeat: ImageRepeat.noRepeat,
-                                        cacheHeight: 200),
-                                    borderRadius: BorderRadius.circular(4)),
-                            Text(post["title"],
-                                style: GoogleFonts.ibmPlexSans(
-                                    fontSize: 22, fontWeight: FontWeight.w600)),
-                            Text(
-                                parse(post["content"]).body.text.length > 99
-                                    ? parse(post["content"])
-                                            .body
-                                            .text
-                                            .substring(0, 100)
-                                            .trimLeft() +
-                                        "..."
-                                    : parse(post["content"]).body.text,
-                                style: GoogleFonts.ibmPlexSans()),
-                            SizedBox(height: 20)
-                          ],
-                        ));
-                  }, childCount: snapshot.data.length))
+                    return new KeepAlive(
+                        keepAlive: true,
+                        child: IndexedSemantics(
+                            index: index,
+                            child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ContentReader(
+                                                feedItem: post,
+                                              )));
+                                },
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: <Widget>[
+                                    feeder.imageUrlFromPost(post) != null
+                                        ? ClipRRect(
+                                            child: Image.network(
+                                                feeder.imageUrlFromPost(post),
+                                                filterQuality:
+                                                    FilterQuality.low,
+                                                fit: BoxFit.cover,
+                                                height: 200,
+                                                repeat: ImageRepeat.noRepeat,
+                                                cacheHeight: 200),
+                                            borderRadius:
+                                                BorderRadius.circular(4))
+                                        : ClipRRect(
+                                            child: Image.network(
+                                                getPlaceholderImageUrl(),
+                                                filterQuality:
+                                                    FilterQuality.low,
+                                                fit: BoxFit.cover,
+                                                height: 200,
+                                                repeat: ImageRepeat.noRepeat,
+                                                cacheHeight: 200),
+                                            borderRadius:
+                                                BorderRadius.circular(4)),
+                                    Text(post["title"],
+                                        style: GoogleFonts.ibmPlexSans(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.w600)),
+                                    Text(
+                                        parse(post["content"])
+                                                    .body
+                                                    .text
+                                                    .length >
+                                                99
+                                            ? parse(post["content"])
+                                                    .body
+                                                    .text
+                                                    .substring(0, 100)
+                                                    .trimLeft() +
+                                                "..."
+                                            : parse(post["content"]).body.text,
+                                        style: GoogleFonts.ibmPlexSans()),
+                                    SizedBox(height: 20)
+                                  ],
+                                ))));
+                  },
+                          childCount: snapshot.data.length,
+                          addSemanticIndexes: false,
+                          addAutomaticKeepAlives: false,
+                          addRepaintBoundaries: false))
                 ],
               ),
             ),

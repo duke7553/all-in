@@ -1,9 +1,8 @@
-import 'dart:convert';
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:html/parser.dart';
 import 'feeder.dart';
 import 'main.dart';
 
