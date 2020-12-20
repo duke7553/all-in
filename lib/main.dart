@@ -70,6 +70,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
+extension on TextStyle {
+  /// Temporary fix the following Flutter Web issues
+  /// https://github.com/flutter/flutter/issues/63467
+  /// https://github.com/flutter/flutter/issues/64904#issuecomment-699039851
+  /// https://github.com/flutter/flutter/issues/65526
+  TextStyle get withZoomFix => copyWith(wordSpacing: 0);
+}
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -115,7 +123,8 @@ class _MyHomePageState extends State<MyHomePage> {
             // the App.build method, and use it to set our appbar title.
             title: Text(widget.title,
                 style: GoogleFonts.ibmPlexSans(
-                    color: Colors.black, fontWeight: FontWeight.bold)),
+                        color: Colors.black, fontWeight: FontWeight.bold)
+                    .withZoomFix),
             elevation: 0,
             backgroundColor: Colors.white,
             centerTitle: true,
@@ -148,9 +157,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                     : Colors.black),
                             Text("Lessons",
                                 style: GoogleFonts.ibmPlexSans(
-                                    color: _selectedIndex == 0
-                                        ? Color.fromRGBO(183, 28, 28, 1)
-                                        : Colors.black)),
+                                        color: _selectedIndex == 0
+                                            ? Color.fromRGBO(183, 28, 28, 1)
+                                            : Colors.black)
+                                    .withZoomFix),
                           ],
                         ),
                       ),
@@ -174,9 +184,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                       : Colors.black),
                               Text("About",
                                   style: GoogleFonts.ibmPlexSans(
-                                      color: _selectedIndex == 1
-                                          ? Color.fromRGBO(183, 28, 28, 1)
-                                          : Colors.black)),
+                                          color: _selectedIndex == 1
+                                              ? Color.fromRGBO(183, 28, 28, 1)
+                                              : Colors.black)
+                                      .withZoomFix),
                             ],
                           ),
                         ),
@@ -197,7 +208,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       materialTapTargetSize: MaterialTapTargetSize.padded,
                       label: Text("Let's talk",
                           style: GoogleFonts.ibmPlexSans(
-                              fontWeight: FontWeight.w500)),
+                                  fontWeight: FontWeight.w500)
+                              .withZoomFix),
                       onPressed: contactInvoked,
                       tooltip: 'We\'re always here for you',
                       elevation: 3.25,
@@ -296,8 +308,9 @@ class LessonsPageState extends StatelessWidget {
                                                 BorderRadius.circular(4)),
                                     Text(post["title"],
                                         style: GoogleFonts.ibmPlexSans(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w600)),
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.w600)
+                                            .withZoomFix),
                                     Text(
                                         parse(post["content"])
                                                     .body
@@ -311,7 +324,8 @@ class LessonsPageState extends StatelessWidget {
                                                     .trimLeft() +
                                                 "..."
                                             : parse(post["content"]).body.text,
-                                        style: GoogleFonts.ibmPlexSans()),
+                                        style: GoogleFonts.ibmPlexSans()
+                                            .withZoomFix),
                                     SizedBox(height: 20)
                                   ],
                                 ))));
@@ -331,7 +345,8 @@ class LessonsPageState extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text("Loading ", style: GoogleFonts.ibmPlexSans()),
+                    Text("Loading ",
+                        style: GoogleFonts.ibmPlexSans().withZoomFix),
                     CircularProgressIndicator()
                   ]));
         }
@@ -401,9 +416,11 @@ class TextHeading extends SliverPersistentHeaderDelegate {
                   children: <Widget>[
                     Text(heading,
                         style: GoogleFonts.ibmPlexSans(
-                            fontWeight: FontWeight.bold, fontSize: 22)),
+                                fontWeight: FontWeight.bold, fontSize: 22)
+                            .withZoomFix),
                     Text(subHeading,
-                        style: GoogleFonts.ibmPlexSans(fontSize: 16)),
+                        style:
+                            GoogleFonts.ibmPlexSans(fontSize: 16).withZoomFix),
                   ])),
         ),
       ]);

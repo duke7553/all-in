@@ -25,6 +25,14 @@ class ContentReader extends StatefulWidget {
   ContentReaderState createState() => ContentReaderState();
 }
 
+extension on TextStyle {
+  /// Temporary fix the following Flutter Web issues
+  /// https://github.com/flutter/flutter/issues/63467
+  /// https://github.com/flutter/flutter/issues/64904#issuecomment-699039851
+  /// https://github.com/flutter/flutter/issues/65526
+  TextStyle get withZoomFix => copyWith(wordSpacing: 0);
+}
+
 final Feeder feeder = new Feeder();
 
 class ContentReaderState extends State<ContentReader> {
@@ -34,7 +42,8 @@ class ContentReaderState extends State<ContentReader> {
       appBar: AppBar(
           title: Text("Reading: Lesson Post",
               style: GoogleFonts.ibmPlexSans(
-                  color: Colors.black, fontWeight: FontWeight.bold)),
+                      color: Colors.black, fontWeight: FontWeight.bold)
+                  .withZoomFix),
           elevation: 0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -70,12 +79,15 @@ class ContentReaderState extends State<ContentReader> {
                           Text(
                             widget.feedItem["title"],
                             style: GoogleFonts.ibmPlexSans(
-                                fontWeight: FontWeight.bold, fontSize: 32),
+                                    fontWeight: FontWeight.bold, fontSize: 32)
+                                .withZoomFix,
                           ),
                           Text((widget.feedItem["author"])["displayName"],
-                              style: GoogleFonts.ibmPlexSans(fontSize: 18)),
+                              style: GoogleFonts.ibmPlexSans(fontSize: 18)
+                                  .withZoomFix),
                           Text(widget.feedItem["published"],
-                              style: GoogleFonts.ibmPlexSans(fontSize: 16)),
+                              style: GoogleFonts.ibmPlexSans(fontSize: 16)
+                                  .withZoomFix),
                           SizedBox(height: 12),
                           Container(
                               child: Text(
@@ -88,8 +100,8 @@ class ContentReaderState extends State<ContentReader> {
                                     mimeType: "text/html",
                                   ).data.contentAsString().trimLeft(),
                                   softWrap: true,
-                                  style:
-                                      GoogleFonts.ibmPlexSerif(fontSize: 16))),
+                                  style: GoogleFonts.ibmPlexSerif(fontSize: 16)
+                                      .withZoomFix)),
                         ],
                       ))
                 ]),
