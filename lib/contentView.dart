@@ -4,7 +4,7 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'feeder.dart';
-import 'main.dart';
+import 'loadFeeds.dart';
 
 class ContentReader extends StatefulWidget {
   ContentReader({Key key, this.title, this.feedItem}) : super(key: key);
@@ -19,7 +19,7 @@ class ContentReader extends StatefulWidget {
   // always marked "final".
 
   final String title;
-  final feedItem;
+  final FeedItemModel feedItem;
 
   @override
   ContentReaderState createState() => ContentReaderState();
@@ -62,14 +62,7 @@ class ContentReaderState extends State<ContentReader> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Image.network(
-                      feeder.imageUrlFromPost(widget.feedItem) != null
-                          ? feeder.imageUrlFromPost(widget.feedItem)
-                          : LessonsPageState.getPlaceholderImageUrl(),
-                      fit: BoxFit.cover,
-                      repeat: ImageRepeat.noRepeat,
-                      height: 200,
-                      cacheHeight: 200),
+                  widget.feedItem.feedImage,
                   Padding(
                       padding: EdgeInsets.all(12),
                       child: Column(
@@ -77,22 +70,24 @@ class ContentReaderState extends State<ContentReader> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            widget.feedItem["title"],
+                            widget.feedItem.rawPost["title"],
                             style: GoogleFonts.ibmPlexSans(
                                     fontWeight: FontWeight.bold, fontSize: 32)
                                 .withZoomFix,
                           ),
-                          Text((widget.feedItem["author"])["displayName"],
+                          Text(
+                              (widget
+                                  .feedItem.rawPost["author"])["displayName"],
                               style: GoogleFonts.ibmPlexSans(fontSize: 18)
                                   .withZoomFix),
-                          Text(widget.feedItem["published"],
+                          Text(widget.feedItem.rawPost["published"],
                               style: GoogleFonts.ibmPlexSans(fontSize: 16)
                                   .withZoomFix),
                           SizedBox(height: 12),
                           Container(
                               child: Text(
                                   Uri.dataFromString(
-                                    widget.feedItem["content"]
+                                    widget.feedItem.rawPost["content"]
                                         .toString()
                                         .replaceAll("<br />", "\n")
                                         .replaceAll(RegExp("<(.*?)>"), "")

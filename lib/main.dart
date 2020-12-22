@@ -18,7 +18,6 @@ void main() {
   runApp(MyApp());
 }
 
-int _selectedIndex = 0;
 Map<int, Color> color = {
   50: Color.fromRGBO(183, 28, 28, .1),
   100: Color.fromRGBO(183, 28, 28, .2),
@@ -97,14 +96,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  StatelessWidget bodyWidget = LessonsPageState();
-  void getBodyFromSelectedIndex() {
+  PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: 0);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
     setState(() {
-      if (_selectedIndex == 0) {
-        bodyWidget = LessonsPageState();
-      } else if (_selectedIndex == 1) {
-        bodyWidget = AboutPageState();
-      }
+      _selectedIndex = index;
+      _pageController.jumpToPage(index);
     });
   }
 
@@ -129,73 +140,25 @@ class _MyHomePageState extends State<MyHomePage> {
             backgroundColor: Colors.white,
             centerTitle: true,
           ),
-          body: bodyWidget,
+          body: PageView(
+            controller: _pageController,
+            children: [LessonsPageState(), AboutPageState()],
+          ),
           // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           // floatingActionButton: , // This trailing comma makes auto-formatting nicer for build methods.
-          bottomNavigationBar: BottomAppBar(
-              shape: AutomaticNotchedShape(
-                  RoundedRectangleBorder(), StadiumBorder()),
-              notchMargin: 5.0,
-              elevation: 12.0,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Expanded(
-                      child: SizedBox(
-                    height: 60,
-                    child: Material(
-                      type: MaterialType.transparency,
-                      child: InkWell(
-                        onTap: onLessonsInvoked,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(FluentIcons.lightbulb_filament_24_regular,
-                                color: _selectedIndex == 0
-                                    ? Color.fromRGBO(183, 28, 28, 1)
-                                    : Colors.black),
-                            Text("Lessons",
-                                style: GoogleFonts.ibmPlexSans(
-                                        color: _selectedIndex == 0
-                                            ? Color.fromRGBO(183, 28, 28, 1)
-                                            : Colors.black)
-                                    .withZoomFix),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )),
-                  SizedBox(width: 50),
-                  Expanded(
-                    child: SizedBox(
-                      height: 60,
-                      child: Material(
-                        type: MaterialType.transparency,
-                        child: InkWell(
-                          onTap: _onAboutInvoked,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(FluentIcons.info_24_regular,
-                                  color: _selectedIndex == 1
-                                      ? Color.fromRGBO(183, 28, 28, 1)
-                                      : Colors.black),
-                              Text("About",
-                                  style: GoogleFonts.ibmPlexSans(
-                                          color: _selectedIndex == 1
-                                              ? Color.fromRGBO(183, 28, 28, 1)
-                                              : Colors.black)
-                                      .withZoomFix),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ))),
+          bottomNavigationBar: BottomNavigationBar(
+              items: [
+                BottomNavigationBarItem(
+                    icon: Icon(FluentIcons.lightbulb_filament_24_regular),
+                    label: "Lessons"),
+                BottomNavigationBarItem(
+                    icon: Icon(FluentIcons.info_24_regular), label: "About")
+              ],
+              selectedItemColor: Color.fromRGBO(183, 28, 28, 1),
+              onTap: _onItemTapped,
+              currentIndex: _selectedIndex,
+              selectedLabelStyle: GoogleFonts.ibmPlexSans().withZoomFix,
+              unselectedLabelStyle: GoogleFonts.ibmPlexSans().withZoomFix)),
       Transform.translate(
           offset: Offset(0, -30),
           child: Align(
@@ -220,26 +183,12 @@ class _MyHomePageState extends State<MyHomePage> {
     ]);
   }
 
-  void _onAboutInvoked() {
-    _selectedIndex = 1;
-    this.setState(() {
-      getBodyFromSelectedIndex();
-    });
-  }
-
   void contactInvoked() {
     // Navigator.push(
     //     context, MaterialPageRoute(builder: (context) => FeedbackWidget()));
     html.window.open(
         "https://docs.google.com/forms/d/e/1FAIpQLSeDeUxHd_EuJx7ehoCuvpUQ1pFH_Vo28QcJimtleRtVeNSdTQ/viewform",
         "_blank");
-  }
-
-  void onLessonsInvoked() {
-    _selectedIndex = 0;
-    this.setState(() {
-      getBodyFromSelectedIndex();
-    });
   }
 }
 
@@ -255,87 +204,51 @@ class LessonsPageState extends StatelessWidget {
           return Container(
             child: Padding(
               padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-              child: CustomScrollView(
-                physics: BouncingScrollPhysics(),
-                slivers: <Widget>[
-                  SliverPersistentHeader(
-                      pinned: false, delegate: TextHeading()),
-                  SliverList(
-                      delegate: SliverChildBuilderDelegate((
-                    BuildContext context,
-                    int index,
-                  ) {
-                    var post = snapshot.data[index];
-                    return new KeepAlive(
-                        keepAlive: true,
-                        child: IndexedSemantics(
-                            index: index,
-                            child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ContentReader(
-                                                feedItem: post,
-                                              )));
-                                },
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: <Widget>[
-                                    feeder.imageUrlFromPost(post) != null
-                                        ? ClipRRect(
-                                            child: Image.network(
-                                                feeder.imageUrlFromPost(post),
-                                                filterQuality:
-                                                    FilterQuality.low,
-                                                fit: BoxFit.cover,
-                                                height: 200,
-                                                repeat: ImageRepeat.noRepeat,
-                                                cacheHeight: 200),
-                                            borderRadius:
-                                                BorderRadius.circular(4))
-                                        : ClipRRect(
-                                            child: Image.network(
-                                                getPlaceholderImageUrl(),
-                                                filterQuality:
-                                                    FilterQuality.low,
-                                                fit: BoxFit.cover,
-                                                height: 200,
-                                                repeat: ImageRepeat.noRepeat,
-                                                cacheHeight: 200),
-                                            borderRadius:
-                                                BorderRadius.circular(4)),
-                                    Text(post["title"],
-                                        style: GoogleFonts.ibmPlexSans(
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.w600)
-                                            .withZoomFix),
-                                    Text(
-                                        parse(post["content"])
-                                                    .body
-                                                    .text
-                                                    .length >
-                                                99
-                                            ? parse(post["content"])
-                                                    .body
-                                                    .text
-                                                    .substring(0, 100)
-                                                    .trimLeft() +
-                                                "..."
-                                            : parse(post["content"]).body.text,
-                                        style: GoogleFonts.ibmPlexSans()
-                                            .withZoomFix),
-                                    SizedBox(height: 20)
-                                  ],
-                                ))));
-                  },
-                          childCount: snapshot.data.length,
-                          addSemanticIndexes: false,
-                          addAutomaticKeepAlives: false,
-                          addRepaintBoundaries: false))
-                ],
-              ),
+              child:
+                  CustomScrollView(physics: BouncingScrollPhysics(), slivers: <
+                      Widget>[
+                SliverPersistentHeader(pinned: false, delegate: TextHeading()),
+                SliverList(
+                    delegate: SliverChildBuilderDelegate((
+                  BuildContext context,
+                  int index,
+                ) {
+                  var post = (snapshot.data[index] as FeedItemModel);
+                  return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ContentReader(
+                                      feedItem: post,
+                                    )));
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          ClipRRect(
+                              child: post.feedImage,
+                              borderRadius: BorderRadius.circular(4)),
+                          Text(post.rawPost["title"],
+                              style: GoogleFonts.ibmPlexSans(
+                                      fontSize: 22, fontWeight: FontWeight.w600)
+                                  .withZoomFix),
+                          Text(
+                              parse(post.rawPost["content"]).body.text.length >
+                                      99
+                                  ? parse(post.rawPost["content"])
+                                          .body
+                                          .text
+                                          .substring(0, 100)
+                                          .trimLeft() +
+                                      "..."
+                                  : parse(post.rawPost["content"]).body.text,
+                              style: GoogleFonts.ibmPlexSans().withZoomFix),
+                          SizedBox(height: 20)
+                        ],
+                      ));
+                }, childCount: snapshot.data.length))
+              ]),
             ),
           );
         } else {
